@@ -1,0 +1,64 @@
+body {
+    fontFamily: 'Arial, sans-serif';
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.background {
+   
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.form-container {
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+}
+
+.form-container::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-container button{
+    background-color: #ffff00;
+    border-color: #ffff00;
+    color: black;
+    width: 154px;
+    padding: 5px 25px;
+    border-radius: 15px;
+    position: relative;
+    left: 31%;
+    font-size: large;
+    font-weight: 800;
+}
+
+.form-container button:hover {
+    background-color: #e6e600;
+    border-color: #e6e600;
+    color: black;
+}

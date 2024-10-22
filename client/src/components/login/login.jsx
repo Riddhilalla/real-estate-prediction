@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaLock, FaUser } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const LoginPage = () => {
+    const [formData, setFormData] = useState({
+        username: '',  
+        password: '',
+    });
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission
+        
+        try {
+            const response = await axios.post('http://localhost:9000/auth/login', formData);
+            
+
+            toast.success('Login successful!');
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Error logging in:', error.response.data); // Log the error response
+            toast.error('Login failed. Please check your credentials.');
+        }
+    };
+
     const globalStyle = {
         margin: 0,
         padding: 0,
@@ -85,6 +119,7 @@ const LoginPage = () => {
                     }
                 `}
             </style>
+            <ToastContainer />
             <div style={containerStyle}>
                 <motion.div
                     style={cardStyle}
@@ -93,13 +128,16 @@ const LoginPage = () => {
                     transition={{ duration: 0.5 }} // Transition duration
                 >
                     <h1 style={titleStyle}>Login</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}> {/* Attach handleSubmit to form submission */}
                         <div style={{ marginBottom: '16px' }}>
                             <FaUser size={20} color="#ffff00" />
                             <input
                                 type="text"
+                                name="username" // Add name attribute for input
                                 placeholder="Username"
                                 style={inputStyle}
+                                value={formData.username} // Controlled input
+                                onChange={handleChange} // Update input on change
                                 required
                             />
                         </div>
@@ -107,8 +145,11 @@ const LoginPage = () => {
                             <FaLock size={20} color="#ffff00" />
                             <input
                                 type="password"
+                                name="password" // Add name attribute for input
                                 placeholder="Password"
                                 style={inputStyle}
+                                value={formData.password} // Controlled input
+                                onChange={handleChange} // Update input on change
                                 required
                             />
                         </div>

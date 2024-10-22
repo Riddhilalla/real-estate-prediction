@@ -1,8 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignupPage = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    try {
+      const response = await axios.post('http://localhost:9000/auth/signup', formData);
+      console.log('User created successfully:', response.data);
+      
+      // Show success toast notification
+        toast.success('User created successfully! Go to Login now.', {
+        onClose: () => {
+            // Optionally redirect or perform an action here
+            window.location.href = '/login'; // Redirect to login page when toast is closed
+        },
+    });
+
+  
+
+    } catch (error) {
+      console.error('Error creating user:', error);
+      toast.error('Error creating user. Please try again.');
+    }
+  };
+
   const globalStyle = {
     margin: 0,
     padding: 0,
@@ -56,11 +95,11 @@ const SignupPage = () => {
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    display: 'block', // Set display to block for centering
-    margin: '0 auto', // Center the button horizontally
+    display: 'block',
+    margin: '0 auto',
     width: '90%',
     fontSize: '16px',
-    transition: 'background-color 0.3s, transform 0.3s', // Button hover effects
+    transition: 'background-color 0.3s, transform 0.3s',
   };
 
   return (
@@ -74,56 +113,66 @@ const SignupPage = () => {
           }
 
           input:focus {
-            border-color: #ffff00; /* Change border color on focus */
-            outline: none; /* Remove outline */
+            border-color: #ffff00;
+            outline: none;
           }
 
           button:hover {
-            background-color: #3f4c55; /* Darker shade on hover */
-            transform: scale(1.05); /* Scale up on hover */
+            background-color: #3f4c55;
+            transform: scale(1.05);
           }
         `}
       </style>
+      <ToastContainer />
       <div style={containerStyle}>
-        <motion.div 
-          style={cardStyle} 
-          initial={{ opacity: 0, scale: 0.8 }} 
-          animate={{ opacity: 1, scale: 1 }} 
+        <motion.div
+          style={cardStyle}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
           <h1 style={titleStyle}>Sign Up</h1>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '16px' }}>
               <FaUser size={20} color="#ffff00" />
-              <input 
-                type="text" 
-                placeholder="Username" 
-                style={inputStyle} 
-                required 
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
+                style={inputStyle}
+                required
               />
             </div>
             <div style={{ marginBottom: '16px' }}>
               <FaEnvelope size={20} color="#ffff00" />
-              <input 
-                type="email" 
-                placeholder="Email" 
-                style={inputStyle} 
-                required 
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                style={inputStyle}
+                required
               />
             </div>
             <div style={{ marginBottom: '16px' }}>
               <FaLock size={20} color="#ffff00" />
-              <input 
-                type="password" 
-                placeholder="Password" 
-                style={inputStyle} 
-                required 
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                style={inputStyle}
+                required
               />
             </div>
-            <motion.button 
-              type="submit" 
-              style={buttonStyle} 
-              whileHover={{ scale: 1.05 }} 
+            <motion.button
+              type="submit"
+              style={buttonStyle}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Sign Up
